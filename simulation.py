@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-np.random.seed(123)
+np.random.seed(3)
 # How likely is it that you roll doubles when rolling two dice?
 
 n_trials = 10_000
@@ -31,7 +31,7 @@ def count_heads(row):
             no_of_heads += 1
     return no_of_heads
 
-p_three_heads = flips.apply(count_heads,axis=1).apply(lambda row: row >= 3).mean()
+p_three_heads = flips.apply(count_heads,axis=1).apply(lambda row: row == 3).mean()
 p_more_than_three_heads = flips.apply(count_heads,axis=1).apply(lambda row: row > 3).mean()
 
 # There are approximitely 3 web development cohorts for every 1 data science cohort at Codeup.
@@ -55,7 +55,7 @@ both_ds
 # Codeup students buy, on average, 3 poptart packages (+- 1.5) a day from the snack vending machine.
 # If on monday the machine is restocked with 17 poptart packages, how likely is it that I will be able to buy some poptarts on Friday afternoon?
 
-n_instance = 1000
+n_instance = 10_000
 stock = 17
 
 daily_consumption = np.random.uniform(1.5,4.5,n_instance)
@@ -85,12 +85,14 @@ p_of_taller_woman = random_height.apply(lambda row: row[1] > row[0], axis=1).mea
 # What is the probability that we observe an installation issue within the first 150 students that download anaconda?
 # How likely is it that 450 students all download anaconda without an issue?
 
+
+
 #Answers
 #probability of failure after 50 students
 failure = 1/250
 n_downloads = 50
 
-weighted_sim_dl = np.random.random(n_downloads) <= failure
+weighted_sim_dl = np.random.random(n_downloads) < failure
 
 weighted_sim_dl.mean() 
 
@@ -98,7 +100,7 @@ weighted_sim_dl.mean()
 failure = 1/250
 n_downloads = 100
 
-weighted_sim_dl = np.random.random(n_downloads) <= failure
+weighted_sim_dl = np.random.random(n_downloads) < failure
 
 weighted_sim_dl.mean() 
 
@@ -106,7 +108,7 @@ weighted_sim_dl.mean()
 failure = 1/250
 n_downloads = 150
 
-weighted_sim_dl = np.random.random(n_downloads) <= failure
+weighted_sim_dl = np.random.random(n_downloads) < failure
 
 weighted_sim_dl.mean() 
 
@@ -132,10 +134,9 @@ def skip_three_days(df):
         row.index 
 p_no_food_truck = weighted_sim_days.apply(lambda row: row[])
 
-
 p_of_taller_woman = random_height.apply(lambda row: row[1] > row[0], axis=1).mean()
 
-
 # How likely is it that a food truck will show up sometime this week?
+
 
 # If 23 people are in the same room, what are the odds that two of them share a birthday? What if it's 20 people? 40?
