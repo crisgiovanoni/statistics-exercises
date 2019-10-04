@@ -2,12 +2,13 @@
 
 # For the following problems, use python to simulate the problem and calculate an experimental probability, then compare that to the theoretical probability.
 
-import stats from scipy
+from scipy import stats
 import numpy as np
 
 # Grades of State University graduates are normally distributed with a mean of 3.0 and a standard deviation of .3.
 # Calculate the following:
 
+#**Theoretical
 # What grade point average is required to be in the top 5% of the graduating class?
 p_top_5 = 5/100
 mean_graduates = 3 
@@ -26,14 +27,24 @@ fourth_point = grads.ppf(p_fourth_point)
 # Would a student with a 2.8 grade point average qualify for this scholarship?
 n = 2.8
 qualify = n > third_point and n < fourth_point 
-
 qualify
 
 # If I have a GPA of 3.5, what percentile am I in?
-
 in_percentile = grads.cdf(3.5)
-
 in_percentile
+
+#**Simulated
+sim_no_of_students = 10_000
+graduates_data = np.random.normal(mean_graduates, sd_graduates,sim_no_of_students)
+
+top_five_percent = np.percentile(graduates_data, 95)
+
+#30th percentile - 20th percentile
+thirtieth_percentile = np.percentile(graduates_data, 30)
+twentieth_percentile = np.percentile(graduates_data, 20)
+
+student_gpa = 2.8
+student_qualify = student_gpa > twentieth_percentile and student_gpa < thirtieth_percentile
 
 # A marketing website has an average click-through rate of 2%.
 # One day they observe 4326 visitors and 97 click-throughs. How likely is it that this many people or more click through?
@@ -52,6 +63,10 @@ p_success = 0.5
 
 homework = stats.binom(questions, p_success).pmf(60) #pmf because being correct or incorrect is discrete?
 homework
+
+first_sixty = np.random.choice(["Correct", "Incorrect"],(sim_visitors,60))
+
+((first_sixty == "Incorrect").sum(axis=1) == 60).mean()
 
 # The codeup staff tends to get upset when the student break area is not cleaned up.
 # Suppose that there's a 3% chance that any one student cleans the break area when they visit it, and, on any given day, about 90% of the 3 active cohorts of 22 students visit the break area.
@@ -140,25 +155,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 np.random.seed(3)
 
-# Grades of State University graduates are normally distributed with a mean of 3.0 and a standard deviation of .3. Calculate the following:
-# What grade point average is required to be in the top 5% of the graduating class?
-# An eccentric alumnus left scholarship money for students in the third decile from the bottom of their class. Determine the range of the third decile. Would a student with a 2.8 grade point average qualify for this scholarship?
-
-sim_no_of_students = 10_000
-graduates_data = np.random.normal(mean_graduates, sd_graduates,sim_no_of_students)
-
-top_five_percent = np.percentile(graduates_data, 95)
-
-#30th percentile - 20th percentile
-
-((flips == 'Heads').sum(axis=1) == 3)
-
-thirtieth_percentile = np.percentile(graduates_data, 30)
-twentieth_percentile = np.percentile(graduates_data, 20)
-
-student_gpa = 2.8
-student_qualify = student_gpa > twentieth_percentile and student_gpa < thirtieth_percentile
-
 # A marketing website has an average click-through rate of 2%.
 # One day they observe 4326 visitors and 97 click-throughs.
 # How likely is it that this many people or more click through?
@@ -177,9 +173,7 @@ sim_ctr.mean()
 
 #bunch of data, see if the first 60 answers out of 100 are correct.
 
-first_sixty = np.random.choice(["Correct", "Incorrect"],(sim_visitors,60))
 
-((first_sixty == "Incorrect").sum(axis=1) == 60).mean()
 
 # The codeup staff tends to get upset when the student break area is not cleaned up.
 # Suppose that there's a 3% chance that any one student cleans the break area when they visit it,
@@ -235,4 +229,4 @@ plt.hist(cars)
 
 no_cars = (np.isin(cars,0).sum())/len(cars)
 three_or_more_cars = (cars >= 3).mean()
-at_least_one = (cars == 1).mean()
+at_least_one = (cars > 0).mean()
